@@ -19,7 +19,7 @@ public class Main {
 
         list2.print();
 
-        System.out.println(list2.pop(2));
+        System.out.println(list2.pop());
 
         list2.print();
 
