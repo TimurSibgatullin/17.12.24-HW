@@ -1,0 +1,201 @@
+package org.example;
+
+public class Main {
+    public static void main(String[] args) {
+
+        List2Direction list2 = new List2Direction();
+
+        list2.add(new Apple("Красный", 55, "Антоновка", 120));
+        list2.add(new Apple("Зеленый", 60, "Грени", 100));
+        list2.add(new Apple("Желтый", 80, "Голден", 130));
+        list2.add(new Apple("Алый", 75, "Гала", 150));
+        list2.add(new Apple("Сливовый", 70, "Спартан", 90));
+        list2.add(new Apple("Красно-белый", 65, "Башкирская красавица", 110));
+
+        list2.print();
+
+        list2.add(3, new Apple("Зеленый", 64,
+                "Семеринская", 125));
+
+        list2.print();
+
+        System.out.println(list2.pop());
+
+        list2.print();
+
+        System.out.println(list2.remove(2));
+
+        list2.print();
+
+        list2.printReverse();
+
+        list2.sort();
+
+        list2.print();
+
+    }
+}
+
+package org.example;
+
+import com.sun.source.util.SourcePositions;
+
+import javax.swing.*;
+
+public class List2Direction {
+
+    private Node first;
+    private Node last;
+
+    public void add(Apple value) {
+        if (first == null) {
+            first = new Node(value);
+        } else {
+            Node current = first;
+            while (current.next != null) {
+                current = current.next;
+            }
+            current.next = new Node(value);
+            current.next.prev = current;
+            last = current.next;
+        }
+    }
+
+    public boolean add(int position, Apple value) {
+        Node a = first;
+        for (int i = 1; i < position; ++i) {
+            a = a.next;
+        }
+        //return false;
+
+        Node b = a;
+        a = new Node(value);
+        a.prev = b.prev;
+        a.next = b;
+        b.prev = a;
+        a.prev.next = a;
+        last = a;
+        return true;
+    }
+
+    public void sort() {
+        while (current != null) {
+        }
+    }
+
+    @Override
+    public String toString() {
+        String res = "";
+        Node current = first;
+        while (current != null) {
+            res += "Цвет: " + current.value.getColor() + ", " + "вес:" + current.value.getWeight() + ", " +
+                    "сорт: " + current.value.getKind() + ", " + "цена: " + current.value.getPrice() + "; ";
+            current = current.next;
+        }
+
+        return res;
+    }
+
+    public Apple pop() {
+        return null;
+    }
+
+    public Apple remove(int position) {
+        Node a = first;
+        for (int i = 1; i < position; ++i) {
+            a = a.next;
+        }
+
+        Node b = a;
+        Apple res = a.next.value;
+        a.prev = b.prev;
+        a.next = b;
+        b.prev = a;
+        a.prev.next = a;
+        last = a;
+        return res;
+    }
+
+    public void printReverse() {
+        Node current = last;
+        while (current != null) {
+            System.out.print("Цвет: " + current.value.getColor() + ", " + "вес:" + current.value.getWeight() + ", " +
+                    "сорт: " + current.value.getKind() + ", " + "цена: " + current.value.getPrice() + "; ");
+            current = current.prev;
+        }
+        System.out.println();
+    }
+
+    public void print() {
+        Node current = first;
+        while (current != null) {
+            System.out.print("Цвет: " + current.value.getColor() + ", " + "вес:" + current.value.getWeight() + ", " +
+                    "сорт: " + current.value.getKind() + ", " + "цена: " + current.value.getPrice() + "; ");
+            current = current.next;
+        }
+        System.out.println();
+    }
+}
+
+package org.example;
+
+public interface CanCompare {
+    int compare(CanCompare other);
+}
+
+package org.example;
+
+public class Apple implements CanCompare {
+
+    private String color;
+    private int weight;
+    private String kind;
+    private int price;
+
+    public Apple(String color, int weight, String kind, int price) {
+        this.color = color;
+        this.weight = weight;
+        this.kind = kind;
+        this.price = price;
+    }
+
+    @Override
+    public int compare(CanCompare other) {
+        return this.price - ((Apple)other).price;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public String getKind() {
+        return kind;
+    }
+
+    public int getWeight() {
+        return weight;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    @Override
+    public String toString() {
+        return color + " " + weight + " " + kind + " " + price;
+    }
+}
+
+package org.example;
+
+public class Node {
+    public Apple value;
+
+    public Node next;
+
+    public Node prev;
+
+    public Node(Apple value) {
+        this.value = value;
+    }
+}

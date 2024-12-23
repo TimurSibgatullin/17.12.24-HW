@@ -36,12 +36,33 @@ public class List2Direction {
         a.next = b;
         b.prev = a;
         a.prev.next = a;
-        last = a;
+        Node current = a;
+        while (current.next != null) {
+            current = current.next;
+        }
+        last = current;
         return true;
     }
 
     public void sort() {
+        if (first == null || first.next == null) return;
 
+        boolean swapped;
+        do {
+            swapped = false;
+            Node current = first;
+
+            while (current.next != null) {
+                if (current.value.compare(current.next.value) > 0) {
+                    // Swap values
+                    Apple temp = current.value;
+                    current.value = current.next.value;
+                    current.next.value = temp;
+                    swapped = true;
+                }
+                current = current.next;
+            }
+        } while (swapped);
     }
 
     @Override
@@ -53,27 +74,38 @@ public class List2Direction {
                     "сорт: " + current.value.getKind() + ", " + "цена: " + current.value.getPrice() + "; ";
             current = current.next;
         }
+
         return res;
     }
 
     public Apple pop() {
-        return null;
+        if (last == null) return null;
+
+        Apple value = last.value;
+        if (last.prev != null) {
+            last = last.prev;
+            last.next = null;
+        } else {
+            first = last = null;
+        }
+        return value;
     }
 
     public Apple remove(int position) {
-        Node a = first;
-        for (int i = 1; i < position; ++i) {
-            a = a.next;
+        if (position < 0 || first == null) return null;
+
+        Node current = first;
+        for (int i = 0; i < position; ++i) {
+            if (current.next == null) return null;
+            current = current.next;
         }
 
-        Node b = a;
-        Apple res = a.next.value;
-        a.prev = b.prev;
-        a.next = b;
-        b.prev = a;
-        a.prev.next = a;
-        last = a;
-        return res;
+        if (current.prev != null) current.prev.next = current.next;
+        if (current.next != null) current.next.prev = current.prev;
+        if (current == first) first = current.next;
+        if (current == last) last = current.prev;
+
+        return current.value;
     }
 
     public void printReverse() {
